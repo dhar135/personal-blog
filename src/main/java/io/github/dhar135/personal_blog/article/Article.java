@@ -42,6 +42,9 @@ public class Article {
     }
 
     public void setTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            throw new IllegalArgumentException("Article title cannot be null or empty");
+        }
         this.title = title;
     }
 
@@ -50,6 +53,9 @@ public class Article {
     }
 
     public void setContent(String content) {
+        if (content == null || content.isEmpty()) {
+            throw new IllegalArgumentException("Article content cannot be null or empty");
+        }
         this.content = content;
     }
 
@@ -58,6 +64,9 @@ public class Article {
     }
 
     public void setPublishDate(LocalDateTime publishDate) {
+        if (publishDate == null || publishDate.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Article publish date cannot be before now");
+        }
         this.publishDate = publishDate;
     }
 
