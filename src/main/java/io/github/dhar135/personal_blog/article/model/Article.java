@@ -1,4 +1,4 @@
-package io.github.dhar135.personal_blog.article;
+package io.github.dhar135.personal_blog.article.model;
 
 import java.time.LocalDateTime;
 
