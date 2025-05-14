@@ -11,13 +11,22 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-
+/**
+ * Repository implementation that stores articles as JSON files in the filesystem
+ */
 @Repository
 public class FileSystemArticleRepository implements ArticleRepository {
 
     private final Path storageDirectory;
     private final ObjectMapper objectMapper;
 
+    /**
+     * Creates a new FileSystemArticleRepository
+     *
+     * @param storageDirectory Path to directory where article files will be stored
+     * @param objectMapper     ObjectMapper for JSON serialization/deserialization
+     * @throws RuntimeException if storage directory cannot be created
+     */
     public FileSystemArticleRepository(@Value("${blog.articles.storage-path}") Path storageDirectory, ObjectMapper objectMapper) {
         this.storageDirectory = Paths.get(storageDirectory.toUri());
         this.objectMapper = objectMapper;
@@ -33,6 +42,13 @@ public class FileSystemArticleRepository implements ArticleRepository {
         }
     }
 
+    /**
+     * Saves an article to a JSON file
+     *
+     * @param article Article to save
+     * @return The saved article
+     * @throws RuntimeException if article cannot be written to file
+     */
     @Override
     public Article save(Article article) {
 
@@ -47,16 +63,46 @@ public class FileSystemArticleRepository implements ArticleRepository {
         return article;
     }
 
+    /**
+     * Finds an article by its ID
+     *
+     * @param id ID of article to find
+     * @return Article if found, null if not found
+     * @throws RuntimeException if article file cannot be read
+     */
     @Override
     public Article findById(long id) {
+
+        String fileName = id + ".json";
+        Path file = storageDirectory.resolve(fileName);
+
+        if (Files.exists(file)) {
+            try {
+                return objectMapper.readValue(file.toFile(), Article.class);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         return null;
     }
 
+    /**
+     * Returns all articles
+     *
+     * @return List of all articles
+     */
     @Override
     public List<Article> findAll() {
+
         return List.of();
     }
 
+    /**
+     * Deletes an article by ID
+     *
+     * @param id ID of article to delete
+     */
     @Override
     public void deleteById(String id) {
 
