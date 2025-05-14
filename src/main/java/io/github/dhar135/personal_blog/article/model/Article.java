@@ -1,15 +1,22 @@
-package io.github.dhar135.personal_blog.article;
+package io.github.dhar135.personal_blog.article.model;
 
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Article {
 
-    private final String id;
+    private String id;
     private String title;
     private String content;
     private LocalDateTime publishDate;
 
-    public Article(String id, String title, String content, LocalDateTime publishDate) {
+    @JsonCreator
+    public Article(
+            @JsonProperty("id") String id,
+            @JsonProperty("title") String title,
+            @JsonProperty("content") String content,
+            @JsonProperty("publishDate") LocalDateTime publishDate) {
 
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("Article id cannot be null or empty");
@@ -64,8 +71,8 @@ public class Article {
     }
 
     public void setPublishDate(LocalDateTime publishDate) {
-        if (publishDate == null || publishDate.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Article publish date cannot be before now");
+        if (publishDate == null) {
+            throw new IllegalArgumentException("Article publish date cannot be null");
         }
         this.publishDate = publishDate;
     }
