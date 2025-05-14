@@ -1,6 +1,7 @@
 package io.github.dhar135.personal_blog.article.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.dhar135.personal_blog.article.model.Article;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -10,9 +11,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Repository implementation that stores articles as JSON files in the filesystem
+ * Repository implementation that stores articles as JSON files in the
+ * filesystem
  */
 @Repository
 public class FileSystemArticleRepository implements ArticleRepository {
@@ -27,9 +30,11 @@ public class FileSystemArticleRepository implements ArticleRepository {
      * @param objectMapper     ObjectMapper for JSON serialization/deserialization
      * @throws RuntimeException if storage directory cannot be created
      */
-    public FileSystemArticleRepository(@Value("${blog.articles.storage-path}") Path storageDirectory, ObjectMapper objectMapper) {
+    public FileSystemArticleRepository(@Value("${blog.articles.storage-path}") Path storageDirectory,
+            ObjectMapper objectMapper) {
         this.storageDirectory = Paths.get(storageDirectory.toUri());
         this.objectMapper = objectMapper;
+        this.objectMapper.registerModule(new JavaTimeModule());
 
         // Create a directory if it doesn't exist
         try {
@@ -71,7 +76,7 @@ public class FileSystemArticleRepository implements ArticleRepository {
      * @throws RuntimeException if article file cannot be read
      */
     @Override
-    public Article findById(long id) {
+    public Article findById(String id) {
 
         String fileName = id + ".json";
         Path file = storageDirectory.resolve(fileName);
@@ -94,8 +99,22 @@ public class FileSystemArticleRepository implements ArticleRepository {
      */
     @Override
     public List<Article> findAll() {
-
-        return List.of();
+        try {
+            return Files.list(storageDirectory)
+                    .filter(Files::isRegularFile)
+                    .map(path -> {
+                        try {
+                            return objectMapper.readValue(path.toFile(), Article.class);
+                        } catch (IOException e) {
+                            throw new RuntimeException(
+                                    "Error reading article from file: " + path + " - " + e.getMessage(), e);
+                        }
+                    })
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading articles from directory: " + storageDirectory.toAbsolutePath()
+                    + " - " + e.getMessage(), e);
+        }
     }
 
     /**
@@ -105,6 +124,13 @@ public class FileSystemArticleRepository implements ArticleRepository {
      */
     @Override
     public void deleteById(String id) {
-
+        Path file = storageDirectory.resolve(id + ".json");
+        if (Files.exists(file)) {
+            try {
+                Files.delete(file);
+            } catch (IOException e) {
+                throw new RuntimeException("Error deleting article from file: " + file + " - " + e.getMessage(), e);
+            }
+        }
     }
 }

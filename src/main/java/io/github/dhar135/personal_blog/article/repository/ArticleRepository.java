@@ -8,7 +8,7 @@ public interface ArticleRepository {
 
     public Article save(Article article);
 
-    public Article findById(long id);
+    public Article findById(String id);
 
     public List<Article> findAll();
 
