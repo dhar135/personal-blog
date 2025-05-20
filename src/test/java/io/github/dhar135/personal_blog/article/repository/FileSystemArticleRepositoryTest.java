@@ -28,7 +28,7 @@ class FileSystemArticleRepositoryTest {
     void setUp() {
         objectMapper = new ObjectMapper();
         repository = new FileSystemArticleRepository(tempDir, objectMapper);
-
+ 
         // Create a test article
         testArticle = new Article(
                 "1",
