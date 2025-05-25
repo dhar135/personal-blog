@@ -1,12 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
 </head>
 <body>
 <h1>Personal Blog</h1>
+<p>Session Id: <span th:text="${sessionId}"></span></p>
+
+<div th:if="${isLoggedIn}">
+    <p>Welcome, <span th:text="${username}"></span>!</p>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+
+<div th:unless="${isLoggedIn}">
+    <p>You are not logged in.</p>
+    <p><a th:href="@{/login}">Sign In</a></p>
+</div>
+
+<h2>Articles</h2>
 <ul>
+    <!-- Assuming you'll iterate over articles eventually -->
+    <!--
+    <li th:each="article : ${articles}" th:text="${article.title}">Article Title</li>
+    -->
     <li>Article 1</li>
     <li>Article 2</li>
 </ul>
