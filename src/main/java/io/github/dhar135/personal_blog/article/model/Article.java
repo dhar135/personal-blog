@@ -6,10 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Article {
 
+
     private String id;
     private String title;
     private String content;
     private LocalDateTime publishDate;
+
+    @JsonCreator
+    public Article() {
+    }
 
     @JsonCreator
     public Article(
@@ -42,6 +47,13 @@ public class Article {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("Article id cannot be null or empty");
+        }
+        this.id = id;
     }
 
     public String getTitle() {

@@ -4,7 +4,9 @@ import io.github.dhar135.personal_blog.article.model.Article;
 import io.github.dhar135.personal_blog.article.repository.ArticleRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The ArticleService class provides functionality for managing and handling articles.
@@ -47,10 +49,16 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public Article save(Article article) {
-        if (article.getId() == null || article.getId().isEmpty()) {
-            throw new IllegalArgumentException("id cannot be null or empty");
+        try {
+            article.setId(UUID.randomUUID().toString());
+            article.setPublishDate(LocalDateTime.now());
+            if (article.getId() == null || article.getId().isEmpty()) {
+                throw new IllegalArgumentException("id cannot be null or empty");
+            }
+            return articleRepository.save(article);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
         }
-        return articleRepository.save(article);
     }
 
     /**
