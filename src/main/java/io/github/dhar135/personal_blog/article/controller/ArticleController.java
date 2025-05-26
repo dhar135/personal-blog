@@ -1,9 +1,7 @@
 package io.github.dhar135.personal_blog.article.controller;
 
 import io.github.dhar135.personal_blog.article.model.Article;
-import io.github.dhar135.personal_blog.article.service.ArticleService;
-import io.github.dhar135.personal_blog.article.service.ArticleServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
+\import io.github.dhar135.personal_blog.article.service.ArticleServiceImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;

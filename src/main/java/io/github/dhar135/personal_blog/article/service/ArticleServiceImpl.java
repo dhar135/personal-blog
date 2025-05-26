@@ -1,7 +1,6 @@
 package io.github.dhar135.personal_blog.article.service;
 
 import io.github.dhar135.personal_blog.article.model.Article;
-import io.github.dhar135.personal_blog.article.repository.ArticleRepository;
 import io.github.dhar135.personal_blog.article.repository.FileSystemArticleRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,6 @@ public class ArticleServiceImpl implements ArticleService {
  }
 
     /**
-     * @param id
      * @return
      */
     @Override
