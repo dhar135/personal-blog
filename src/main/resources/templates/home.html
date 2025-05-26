@@ -8,30 +8,15 @@
 </head>
 <body>
     <div class="d-flex flex-column p-5"><h1>Donovan's Blog</h1>
-
-<!--    <div th:if="${isLoggedIn}">-->
-<!--        <p>Welcome, <span th:text="${username}"></span>!</p>-->
-<!--        <form th:action="@{/logout}" method="post">-->
-<!--            <input type="submit" value="Sign Out"/>-->
-<!--        </form>-->
-<!--        <p><a th:href="@{/new}">Create New Article</a></p>-->
-<!--    </div>-->
-
-<!--    <div th:unless="${isLoggedIn}">-->
-<!--        <p>You are not logged in.</p>-->
-<!--        <p><a th:href="@{/login}">Sign In</a></p>-->
-<!--    </div>-->
-
-    <ul class="list-group">
-        <!-- Assuming you'll iterate over articles eventually -->
-        <li th:each="article : ${articles}" class="list-group-item">
-            <a th:href="@{/article/{id}(id=${article.id})}" th:text="${article.title}">Article Title</a>
-            <p th:text="${#temporals.format(article.publishDate, 'MMMM d, yyyy')}">Article Date</p>
-        </li>
-
-
-    </ul>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+        <ul class="list-group">
+            <!-- Assuming you'll iterate over articles eventually -->
+            <li th:each="article : ${articles}" class="list-group-item">
+                <a th:href="@{/article/{id}(id=${article.id})}" th:text="${article.title}">Article Title</a>
+                <p th:text="${#temporals.format(article.publishDate, 'MMMM d, yyyy')}">Article Date</p>
+            </li>
+        </ul>
+        <p><a th:href="@{/admin}">Go to Admin Page</a></p>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
     </div>
 </body>
 </html>

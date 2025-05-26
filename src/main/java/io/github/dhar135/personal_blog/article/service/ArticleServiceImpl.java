@@ -2,6 +2,7 @@ package io.github.dhar135.personal_blog.article.service;
 
 import io.github.dhar135.personal_blog.article.model.Article;
 import io.github.dhar135.personal_blog.article.repository.ArticleRepository;
+import io.github.dhar135.personal_blog.article.repository.FileSystemArticleRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,9 +18,9 @@ import java.util.UUID;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
- final ArticleRepository articleRepository;
+ final FileSystemArticleRepository articleRepository;
 
- public ArticleServiceImpl(ArticleRepository articleRepository) {
+ public ArticleServiceImpl(FileSystemArticleRepository articleRepository) {
      this.articleRepository = articleRepository;
  }
 

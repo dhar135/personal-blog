@@ -2,6 +2,7 @@ package io.github.dhar135.personal_blog.article.controller;
 
 import io.github.dhar135.personal_blog.article.model.Article;
 import io.github.dhar135.personal_blog.article.service.ArticleService;
+import io.github.dhar135.personal_blog.article.service.ArticleServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,21 +12,28 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
 public class ArticleController {
 
-    private final ArticleService articleService;
+    private final ArticleServiceImpl articleService;
 
-    public ArticleController(ArticleService articleService) {
+    public ArticleController(ArticleServiceImpl articleService) {
         this.articleService = articleService;
     }
 
     // Home Page
     @GetMapping({"/", "/home"})
-    public String showHomePage(Model model, Principal principal, Authentication authentication) {
+    public String showHomePage(Model model) {
+        List<Article> articles = articleService.findAll();
+        model.addAttribute("articles", articles);
+
+        return "home";
+    }
+
+    @GetMapping("/admin")
+    public String showAdminPage(Model model, Principal principal, Authentication authentication) {
         List<Article> articles = articleService.findAll();
         model.addAttribute("articles", articles);
         if (principal != null) {
@@ -39,7 +47,7 @@ public class ArticleController {
         } else {
             model.addAttribute("isLoggedIn", false);
         }
-        return "home";
+        return "admin";
     }
 
     @PostMapping("/create_article")
@@ -50,7 +58,7 @@ public class ArticleController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
         }
-        return "redirect:/home";
+        return "redirect:/admin";
     }
 
     // Show create article form
@@ -64,6 +72,29 @@ public class ArticleController {
     public String getArticle(@PathVariable("id") String id, Model model) {
         model.addAttribute("article", articleService.findById(id));
         return "article";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditArticleForm(@PathVariable("id") String id, Model model) {
+        model.addAttribute("article", articleService.findById(id));
+        return "edit";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteArticle(@PathVariable("id") String id, Model model) {
+        model.addAttribute("article", articleService.findById(id));
+        return "delete";
+    }
+
+    @PostMapping("/delete")
+    public String deleteArticle(@ModelAttribute("article") Article article, RedirectAttributes redirectAttributes) {
+        try {
+            articleService.delete(article.getId());
+            redirectAttributes.addFlashAttribute("message", "Successfully deleted an article");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/admin";
     }
 
 
