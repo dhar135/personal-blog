@@ -71,6 +71,22 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.deleteById(id);
     }
 
+    /**
+     * @param article
+     * @return
+     */
+    @Override
+    public Article update(Article article) {
+       try {
+           article.setPublishDate(LocalDateTime.now());
+           if (article.getId() == null || article.getId().isEmpty()) {
+               throw new IllegalArgumentException("id cannot be null or empty");
+           }
+           return articleRepository.update(article);
+       } catch (IllegalArgumentException e) {
+           throw new RuntimeException(e);
+       }
+    }
 
 
 }

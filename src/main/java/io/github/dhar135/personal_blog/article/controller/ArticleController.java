@@ -78,6 +78,17 @@ public class ArticleController {
         return "edit";
     }
 
+    @PostMapping("/update")
+    public String editArticle(@ModelAttribute("article") Article article, RedirectAttributes redirectAttributes) {
+        try {
+            articleService.update(article);
+            redirectAttributes.addFlashAttribute("message", "Successfully updated a new article");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/admin";
+    }
+
     @GetMapping("/delete/{id}")
     public String deleteArticle(@PathVariable("id") String id, Model model) {
         model.addAttribute("article", articleService.findById(id));

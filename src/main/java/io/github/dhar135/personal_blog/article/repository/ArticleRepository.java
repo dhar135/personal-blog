@@ -6,12 +6,14 @@ import java.util.List;
 
 public interface ArticleRepository {
 
-    public Article save(Article article);
+    Article save(Article article);
 
-    public Article findById(String id);
+    Article findById(String id);
 
-    public List<Article> findAll();
+    List<Article> findAll();
 
-    public void deleteById(String id);
+    void deleteById(String id);
+
+    Article update(Article article);
 
 }

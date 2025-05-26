@@ -9,4 +9,5 @@ public interface ArticleService {
     List<Article> findAll();
     Article save(Article article);
     void delete(String id);
+    Article update(Article article);
 }

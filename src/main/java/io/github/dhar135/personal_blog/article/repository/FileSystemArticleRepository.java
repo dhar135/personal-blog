@@ -133,4 +133,21 @@ public class FileSystemArticleRepository implements ArticleRepository {
             }
         }
     }
+
+    /**
+     * @param article
+     * @return
+     */
+    @Override
+    public Article update(Article article) {
+       Path file = storageDirectory.resolve(article.getId() + ".json");
+       if (Files.exists(file)) {
+           try {
+               objectMapper.writeValue(file.toFile(), article);
+           } catch (IOException e) {
+               throw new RuntimeException("Error updating article from file: " + file + " - " + e.getMessage(), e);
+           }
+       }
+       return article;
+    }
 }
